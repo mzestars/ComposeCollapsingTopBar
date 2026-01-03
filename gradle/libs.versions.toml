@@ -1,6 +1,7 @@
 [versions]
-agp = "8.7.1"
+agp = "8.5.2"
 kotlin = "2.0.21"
+compose = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
@@ -23,6 +24,8 @@ slack-compose-linter = { group = "com.slack.lint.compose", name = "compose-lint-
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
