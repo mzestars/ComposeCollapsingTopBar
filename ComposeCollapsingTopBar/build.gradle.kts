@@ -1,10 +1,43 @@
+import com.vanniktech.maven.publish.KotlinMultiplatform
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.multiplatform)
+    alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.jetbrains.kotlin.compose)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.vanniktech.maven.publish)
+}
+
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+        publishLibraryVariants("release")
+    }
+    
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+        }
+        
+        androidMain.dependencies {
+            implementation(libs.androidx.compose.ui.tooling.preview)
+        }
+        
+        iosMain.dependencies {
+        }
+    }
 }
 
 android {
@@ -31,23 +64,21 @@ android {
             )
         }
     }
+    
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    
     composeCompiler {
         reportsDestination = layout.buildDirectory.dir("compose_reports")
     }
+    
+    // Configure source sets for Android
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -60,10 +91,10 @@ dependencies {
 
 mavenPublishing {
     configure(
-        AndroidSingleVariantLibrary(
-            variant = "release",
+        KotlinMultiplatform(
+            androidVariantsToPublish = listOf("release"),
             sourcesJar = true,
             publishJavadocJar = true,
-        ),
+        )
     )
 }

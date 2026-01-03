@@ -2,14 +2,17 @@
 
 [![GitHub Release](https://img.shields.io/github/v/release/flaringapp/ComposeCollapsingTopBar?label=Release)](https://github.com/flaringapp/ComposeCollapsingTopBar/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.flaringapp/ComposeCollapsingTopBar)](https://central.sonatype.com/artifact/io.github.flaringapp/ComposeCollapsingTopBar)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-blue.svg)](https://kotlinlang.org)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.7.1-blue.svg)](https://www.jetbrains.com/lp/compose-multiplatform/)
 [![API](https://img.shields.io/badge/API-21%2B-green.svg)](https://android-arsenal.com/api?level=21)
+[![iOS](https://img.shields.io/badge/iOS-arm64%20%7C%20x64%20%7C%20simulator-blue.svg)](https://developer.apple.com/ios/)
 [![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081)](https://pinterest.github.io/ktlint/)
 [![Licence](https://img.shields.io/github/license/flaringapp/ComposeCollapsingTopBar)](https://github.com/flaringapp/ComposeCollapsingTopBar/blob/main/LICENSE)
 
 If you like this project, :star: star and :loudspeaker: share it!
 
-ComposeCollapsingTopBar is the ultimate Jetpack Compose library for creating versatile collapsing
-header UIs. It provides the capability to build custom top bars with automatic height adjustment,
+ComposeCollapsingTopBar is the ultimate **Compose Multiplatform** library for creating versatile collapsing
+header UIs on **Android and iOS**. It provides the capability to build custom top bars with automatic height adjustment,
 featuring common scroll modes, snapping, and offering plenty of customization options. It's designed
 with ease of use and optimization in mind while providing features similar to `CoordinatorLayout`.
 
@@ -17,13 +20,34 @@ with ease of use and optimization in mind while providing features similar to `C
 &nbsp;&nbsp;
 ![](/docs/assets/cover_collapsing_column.gif)
 
+## Platforms
+
+- ✅ **Android** (API 21+)
+- ✅ **iOS** (iosX64, iosArm64, iosSimulatorArm64)
+
 ## Download
 
-Add the dependency to your target module's `build.gradle.kts` file:
+### For Multiplatform Projects
+
+Add the dependency to your `commonMain` source set:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation("io.github.flaringapp:ComposeCollapsingTopBar:2.0.0")
+        }
+    }
+}
+```
+
+### For Android-Only Projects
+
+Add the dependency to your module's `build.gradle.kts` file:
 
 ```kotlin
 dependencies {
-    implementation("io.github.flaringapp:ComposeCollapsingTopBar:1.1.0")
+    implementation("io.github.flaringapp:ComposeCollapsingTopBar:2.0.0")
 }
 ```
 
@@ -32,6 +56,7 @@ Ensure you've configured repositories in `settings.gradle.kts`:
 ```kotlin
 dependencyResolutionManagement {
     repositories {
+        google()
         mavenCentral()
     }
 }
@@ -565,6 +590,48 @@ data: `state.isFullyEntered` and `state.isFullyExited`, as well as manual contro
 This state exposes current exit offset via `exitHeight`.
 
 </details>
+
+## Multiplatform Migration
+
+ComposeCollapsingTopBar 2.0+ is now a **Compose Multiplatform** library supporting both Android and iOS!
+
+### For Existing Android Users
+
+**Good news**: The migration is seamless! The API remains 100% compatible.
+
+1. Update your dependency version to 2.0.0+
+2. Your existing code continues to work without any changes
+3. Optionally migrate to multiplatform setup if targeting iOS
+
+### For iOS Integration
+
+The library works identically on iOS thanks to Compose Multiplatform:
+
+```kotlin
+// In your commonMain or iosMain
+@Composable
+fun MyScreen() {
+    CollapsingTopBarScaffold(
+        scrollMode = CollapsingTopBarScaffoldScrollMode.collapse(),
+        topBar = {
+            // Your collapsing header content
+        },
+        body = {
+            // Your scrollable content
+        }
+    )
+}
+```
+
+### Technical Details
+
+See [MIGRATION_MANIFEST.md](MIGRATION_MANIFEST.md) for comprehensive migration details including:
+- Complete structural changes
+- Build configuration updates
+- Validation results
+- Platform-specific considerations
+
+The library required **zero expect/actual declarations** because it's built entirely on Compose Multiplatform APIs!
 
 ## More examples
 
